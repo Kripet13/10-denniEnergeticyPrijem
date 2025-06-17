@@ -36,22 +36,26 @@ window.onload = function () {
 
 // Přidání potraviny do seznamu
 function addFoodToList() {
-  let food = document.getElementById("food").value.trim();
-  let grams = parseFloat(document.getElementById("grams").value);
+  const foodInput = document.getElementById("food").value.trim();
+  const gramsInput = parseFloat(document.getElementById("grams").value);
 
-  let foodItem = foodList.find(item => item.name.toLowerCase() === food.toLowerCase());
-
-  if (!foodItem) {
-    alert("Zadané jídlo nebylo nalezeno.");
+  if (!foodInput || isNaN(gramsInput) || gramsInput <= 0) {
+    alert("Zadejte platné jméno potraviny a množství v gramech.");
     return;
   }
 
-  let foodListElement = document.getElementById("foodList");
-  let li = document.createElement("li");
-  let calories = (foodItem.kCal * grams) / 100;
-  li.textContent = `${foodItem.name} (${calories.toFixed(1)} kCal / ${grams}g)`;
-  foodListElement.appendChild(li);
+  const foodItem = foodList.find(item => item.name.toLowerCase() === foodInput.toLowerCase());
 
+  if (!foodItem) {
+    alert("Zadaná potravina nebyla nalezena v referenčním seznamu.");
+    return;
+  }
+
+  const calories = (foodItem.kCal * gramsInput) / 100;
+  const li = document.createElement("li");
+  li.textContent = `${foodItem.name} (${calories.toFixed(1)} kCal / ${gramsInput}g)`;
+
+  document.getElementById("foodList").appendChild(li);
   document.getElementById("food").value = "";
   document.getElementById("grams").value = "";
 
@@ -60,11 +64,11 @@ function addFoodToList() {
 
 // Přepočet celkových kalorií
 function total() {
-  let listItems = document.querySelectorAll("#foodList li");
+  const listItems = document.querySelectorAll("#foodList li");
   let totalCalories = 0;
 
   listItems.forEach(item => {
-    let match = item.textContent.match(/\(([\d.]+) kCal/);
+    const match = item.textContent.match(/\(([\d.]+) kCal/);
     if (match) {
       totalCalories += parseFloat(match[1]);
     }
@@ -73,6 +77,8 @@ function total() {
   document.getElementById("totalCalories").textContent = "Celkem: " + totalCalories.toFixed(1) + " kCal";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("addFood").addEventListener("click", addFoodToList);
-});
+// Reset seznamu jídel a celkových kalorií
+function resetList() {
+  document.getElementById("foodList").innerHTML = "";
+  document.getElementById("totalCalories").textContent = "0 kCal";
+}

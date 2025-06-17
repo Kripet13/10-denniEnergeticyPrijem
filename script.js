@@ -21,4 +21,58 @@ let foodList = [
   { name: "Mandle", kCal: 575 }
 ];
 
+// Seřazení seznamu podle názvu
+foodList.sort((a, b) => a.name.localeCompare(b.name));
 
+// Zobrazení referenčního seznamu potravin
+window.onload = function () {
+  const referenceList = document.getElementById("foodReferenceList");
+  foodList.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.name} (${item.kCal} kCal / 100g)`;
+    referenceList.appendChild(li);
+  });
+};
+
+// Přidání potraviny do seznamu
+function addFoodToList() {
+  let food = document.getElementById("food").value.trim();
+  let grams = parseFloat(document.getElementById("grams").value);
+
+  let foodItem = foodList.find(item => item.name.toLowerCase() === food.toLowerCase());
+
+  if (!foodItem) {
+    alert("Zadané jídlo nebylo nalezeno.");
+    return;
+  }
+
+  let foodListElement = document.getElementById("foodList");
+  let li = document.createElement("li");
+  let calories = (foodItem.kCal * grams) / 100;
+  li.textContent = `${foodItem.name} (${calories.toFixed(1)} kCal / ${grams}g)`;
+  foodListElement.appendChild(li);
+
+  document.getElementById("food").value = "";
+  document.getElementById("grams").value = "";
+
+  total();
+}
+
+// Přepočet celkových kalorií
+function total() {
+  let listItems = document.querySelectorAll("#foodList li");
+  let totalCalories = 0;
+
+  listItems.forEach(item => {
+    let match = item.textContent.match(/\(([\d.]+) kCal/);
+    if (match) {
+      totalCalories += parseFloat(match[1]);
+    }
+  });
+
+  document.getElementById("totalCalories").textContent = "Celkem: " + totalCalories.toFixed(1) + " kCal";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("addFood").addEventListener("click", addFoodToList);
+});

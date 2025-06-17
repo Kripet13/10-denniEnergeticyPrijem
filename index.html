@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,12 @@
     <div id="inputContainer">
         <input id="food" type="text" placeholder="Zadejte jídlo">
         <input id="grams" type="number" placeholder="Zadejte množství v gramech">
-        <button id="addFood">Přidejte jídlo</button>
+        <button onclick="addFoodToList()">Přidejte jídlo</button>
+    </div>
+
+    <div id="listContainer">
+        <h2>Seznam jídel</h2>
+        <ul id="foodList"></ul>
     </div>
 
 <hr/>
@@ -22,6 +27,7 @@
     </div>
 
 <hr/>
+
     <div id="totalContainer">
         <h2>Celkový denní příjem</h2>
         <p id="totalCalories"></p>
